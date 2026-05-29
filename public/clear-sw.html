@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Clear Service Worker - PashuSetu</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 10px 5px;
+            transition: transform 0.2s;
+        }
+        button:hover {
+            transform: translateY(-2px);
+        }
+        .danger {
+            background: linear-gradient(135deg, #f44336 0%, #e91e63 100%);
+        }
+        #status {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            display: none;
+        }
+        .success {
+            background: #d4edda;
+            color: #155724;
+            border-left: 4px solid #28a745;
+        }
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            border-left: 4px solid #dc3545;
+        }
+        .info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border-left: 4px solid #17a2b8;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔧 Service Worker Manager</h1>
+        <p>Service Worker error fix karne ke liye yeh tool use karo:</p>
+        
+        <button onclick="clearEverything()">🚀 Clear Service Worker & Reload</button>
+        <button class="danger" onclick="hardReset()">⚠️ Hard Reset (All Data)</button>
+
+        <div id="status"></div>
+
+        <hr style="margin: 30px 0;">
+        
+        <h3>Manual Steps (Agar button kaam na kare):</h3>
+        <ol>
+            <li>Press <strong>F12</strong> (DevTools kholo)</li>
+            <li><strong>Application</strong> tab me jao</li>
+            <li><strong>Service Workers</strong> section me jao</li>
+            <li><strong>Unregister</strong> button click karo</li>
+            <li><strong>Cache Storage</strong> me jao</li>
+            <li>Sab cache delete karo</li>
+            <li>Page reload karo: <strong>Ctrl+Shift+R</strong></li>
+        </ol>
+    </div>
+
+    <script>
+        function showStatus(message, type) {
+            const statusDiv = document.getElementById('status');
+            statusDiv.textContent = message;
+            statusDiv.className = type;
+            statusDiv.style.display = 'block';
+        }
+
+        async function clearEverything() {
+            try {
+                showStatus('⏳ Clearing service worker and cache...', 'info');
+                
+                // Unregister all service workers
+                if ('serviceWorker' in navigator) {
+                    const registrations = await navigator.serviceWorker.getRegistrations();
+                    for (let registration of registrations) {
+                        await registration.unregister();
+                    }
+                    console.log('✓ Service workers unregistered');
+                }
+
+                // Clear all caches
+                if ('caches' in window) {
+                    const cacheNames = await caches.keys();
+                    await Promise.all(
+                        cacheNames.map(cacheName => caches.delete(cacheName))
+                    );
+                    console.log('✓ All caches cleared');
+                }
+
+                showStatus('✅ Success! Reloading in 2 seconds...', 'success');
+                
+                setTimeout(() => {
+                    window.location.href = '/';
+                }, 2000);
+            } catch (error) {
+                showStatus('❌ Error: ' + error.message, 'error');
+            }
+        }
+
+        async function hardReset() {
+            if (!confirm('⚠️ Warning: This will clear ALL app data including localStorage. Continue?')) {
+                return;
+            }
+
+            try {
+                showStatus('⏳ Performing hard reset...', 'info');
+                
+                // Unregister service workers
+                if ('serviceWorker' in navigator) {
+                    const registrations = await navigator.serviceWorker.getRegistrations();
+                    for (let registration of registrations) {
+                        await registration.unregister();
+                    }
+                }
+
+                // Clear all caches
+                if ('caches' in window) {
+                    const cacheNames = await caches.keys();
+                    await Promise.all(
+                        cacheNames.map(cacheName => caches.delete(cacheName))
+                    );
+                }
+
+                // Clear localStorage
+                localStorage.clear();
+                
+                // Clear sessionStorage
+                sessionStorage.clear();
+
+                // Clear IndexedDB (if any)
+                if ('indexedDB' in window) {
+                    const databases = await indexedDB.databases();
+                    databases.forEach(db => {
+                        indexedDB.deleteDatabase(db.name);
+                    });
+                }
+
+                showStatus('✅ Hard reset complete! Reloading...', 'success');
+                
+                setTimeout(() => {
+                    window.location.href = '/';
+                }, 2000);
+            } catch (error) {
+                showStatus('❌ Error: ' + error.message, 'error');
+            }
+        }
+
+        // Auto-check on load
+        window.addEventListener('load', async () => {
+            if ('serviceWorker' in navigator) {
+                const registrations = await navigator.serviceWorker.getRegistrations();
+                if (registrations.length > 0) {
+                    showStatus(`ℹ️ Found ${registrations.length} service worker(s). Click button to clear.`, 'info');
+                } else {
+                    showStatus('✓ No service workers registered.', 'success');
+                }
+            }
+        });
+    </script>
+</body>
+</html>
