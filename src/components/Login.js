@@ -639,7 +639,7 @@ function Login() {
           color: '#1e3c72',
           marginBottom: '10px'
         }}>
-          सहायता एवं संपर्क | Support & Contact
+          ABOUT
         </h3>
       </div>
       
