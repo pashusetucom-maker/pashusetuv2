@@ -653,7 +653,11 @@ function Login() {
       }}>
         किसी भी प्रकार की सहायता या जानकारी के लिए अपने district collector office या SPCA office से संपर्क करें।
         <br/>
-        <em>For any assistance or information, contact your district collector office or SPCA office.</em>
+        <em>PASHU SETU
+Livestock Market Digital Receipt & Verification System
+Managed & Operated by VAISHANAV KHANDAIT
+PashuSetu is a digital platform for livestock market receipt, verification and OTP-based communication.
+© 2026 PASHU SETU. All Rights Reserved.</em>
       </p>
       
       <div style={{
