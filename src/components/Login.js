@@ -653,11 +653,15 @@ function Login() {
       }}>
         किसी भी प्रकार की सहायता या जानकारी के लिए अपने district collector office या SPCA office से संपर्क करें।
         <br/>
-        <em>PASHU SETU
-Livestock Market Digital Receipt & Verification System
-Managed & Operated by VAISHANAV KHANDAIT
-PashuSetu is a digital platform for livestock market receipt, verification and OTP-based communication.
-© 2026 PASHU SETU. All Rights Reserved.</em>
+        <em>PASHU SETU PANDHURNA
+
+A Digital Livestock Market Receipt & Verification Platform.
+
+Owned and Operated by INDU DIVINE
+
+PASHU SETU is a digital platform for livestock market receipts, verification and OTP-based communication.
+
+© 2026 INDU DIVINE | PASHU SETU. All Rights Reserved.</em>
       </p>
       
       <div style={{
